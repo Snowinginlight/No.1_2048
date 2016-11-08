@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.lang.Math;
@@ -51,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-
         RelativeLayout cube_1_1 = (RelativeLayout) findViewById(R.id.cube_1_1);
         RelativeLayout cube_1_2 = (RelativeLayout) findViewById(R.id.cube_1_2);
         RelativeLayout cube_1_3 = (RelativeLayout) findViewById(R.id.cube_1_3);
@@ -243,9 +244,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         TextView newOne = RemainList.get((int) (Math.random() * RemainList.size()));
+        newOne.startAnimation(animation());
         newOne.setText(String.valueOf(createOne[new Random().nextInt(createOne.length)]));
+        TextToCube.get(newOne).startAnimation(animation());
         TextToCube.get(newOne).setBackgroundResource(NumMap.get(newOne.getText()));
-
     }
 
     private void createTwo() {
@@ -265,6 +267,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getScore() {
+        NowScore = 0;
+        Score.setText(String.valueOf(NowScore));
         SharedPreferences pref = getSharedPreferences("score", MODE_PRIVATE);
         scoreTop = pref.getInt("highscore", 0);
         HighScore.setText(String.valueOf(scoreTop));
@@ -367,7 +371,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void animation() {
+    private Animation animation() {
+        ScaleAnimation createAnimation = new ScaleAnimation(0,1,0,1,Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        createAnimation.setDuration(300);
+        return createAnimation;
     }
 
     @Override
